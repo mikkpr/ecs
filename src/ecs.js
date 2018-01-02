@@ -11,8 +11,17 @@ import { fastSplice } from './utils';
 export default class ECS {
     /**
      *
+     * @param {object} options - configuration options for ECS
+     *                   -
      */
-    constructor() {
+    constructor(options) {
+        /**
+         * Loop over systems in order, instead of entities
+         *
+         * @member {boolean}
+         */
+        this.systemsFirst = options.systemsFirst || false;
+
         /**
          * Store all entities of the ECS.
          *
@@ -141,6 +150,13 @@ export default class ECS {
         const now = performance.now();
         const elapsed = now - this.lastUpdate;
 
+        (this.systemsFirst ? this.updateSystems : this.updateEntities)();
+
+        this.updateCounter += 1;
+        this.lastUpdate = now;
+    }
+
+    updateEntities() {
         // update each entity
         for (let i = 0; i < this.entities.length; ++i) {
             const entity = this.entities[i];
@@ -155,9 +171,23 @@ export default class ECS {
                 system.update(entity, elapsed);
             }
         }
+    }
 
-        this.updateCounter += 1;
-        this.lastUpdate = now;
+    updateSystems() {
+        // update each system and its entities
+        for (let i = 0; i < this.systems.length; ++i) {
+            const system = this.systems[i];
+
+            for (let j = 0; j < system.entities.length; ++j) {
+                const entity = system.entities[j];
+
+                if (this.updateCounter % system.frequency > 0 || !system.enable) {
+                    continue;
+                }
+
+                system.update(entity, elapsed);
+            }
+        }
     }
 }
 
