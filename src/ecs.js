@@ -150,13 +150,13 @@ export default class ECS {
         const now = performance.now();
         const elapsed = now - this.lastUpdate;
 
-        (this.systemsFirst ? this.updateSystems : this.updateEntities)();
-
-        this.updateCounter += 1;
-        this.lastUpdate = now;
+        (this.systemsFirst
+          ? this.updateSystems.bind(this)
+          : this.updateEntities.bind(this)
+        )(now, elapsed);
     }
 
-    updateEntities() {
+    updateEntities(now, elapsed) {
         // update each entity
         for (let i = 0; i < this.entities.length; ++i) {
             const entity = this.entities[i];
@@ -171,9 +171,11 @@ export default class ECS {
                 system.update(entity, elapsed);
             }
         }
+        this.updateCounter += 1;
+        this.lastUpdate = now;
     }
 
-    updateSystems() {
+    updateSystems(now, elapsed) {
         // update each system and its entities
         for (let i = 0; i < this.systems.length; ++i) {
             const system = this.systems[i];
@@ -188,6 +190,8 @@ export default class ECS {
                 system.update(entity, elapsed);
             }
         }
+        this.updateCounter += 1;
+        this.lastUpdate = now;
     }
 }
 

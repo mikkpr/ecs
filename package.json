@@ -1,20 +1,21 @@
 {
-  "name": "@fae/ecs",
-  "version": "1.0.2",
+  "name": "mikkpr-ecs",
+  "version": "1.0.6",
   "description": "Entity Component System used in the Fae rendering engine",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
   "main": "dist/ecs.js",
   "contributors": [
-    "Pierre Beaujeu"
+    "Pierre Beaujeu",
+    "Mikk Pristavka"
   ],
-  "homepage": "https://github.com/Fae/ecs#readme",
+  "homepage": "https://github.com/mikkpr/ecs#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Fae/ecs.git"
+    "url": "git+https://github.com/mikkpr/ecs.git"
   },
   "bugs": {
-    "url": "https://github.com/Fae/ecs/issues"
+    "url": "https://github.com/mikkpr/ecs/issues"
   },
   "keywords": [
     "game",
